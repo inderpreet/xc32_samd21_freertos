@@ -29,6 +29,9 @@
 
 #include "app2.h"
 
+#include "bsp/bsp.h"
+#include "queue.h"
+#include "app.h"
 // *****************************************************************************
 // *****************************************************************************
 // Section: Global Data Definitions
@@ -112,7 +115,9 @@ void APP2_Initialize ( void )
 
 void APP2_Tasks ( void )
 {
-
+    // added this line to the generated code
+    unsigned long qValue;
+    
     /* Check the application's current state. */
     switch ( app2Data.state )
     {
@@ -132,7 +137,12 @@ void APP2_Tasks ( void )
 
         case APP2_STATE_SERVICE_TASKS:
         {
-            
+            // added this line to the generated code
+            xQueueReceive(xQueue, &qValue, 99999);
+            if(qValue == 2){
+                LED_Toggle();
+                vTaskDelay(QUEUE_SEND_FREQUENCY_MS-100 );
+            }
             break;
         }
 

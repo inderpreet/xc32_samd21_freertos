@@ -31,6 +31,8 @@
 #include "bsp/bsp.h"
 #include "queue.h"
 
+
+#include "app.h"
 // *****************************************************************************
 // *****************************************************************************
 // Section: Global Data Definitions
@@ -138,10 +140,11 @@ void APP1_Tasks ( void )
         {
             // added this line to the generated code
             xQueueReceive(xQueue, &qValue, 99999);
-            if(qValue == 1)
-                LED_On();
-            else if(qValue == 2)
-                LED_Off();
+            if(qValue == 1){
+                LED_Toggle();
+                vTaskDelay(QUEUE_SEND_FREQUENCY_MS-100 );
+            }
+            
             
             break;
         }
