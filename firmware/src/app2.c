@@ -138,10 +138,11 @@ void APP2_Tasks ( void )
         case APP2_STATE_SERVICE_TASKS:
         {
             // added this line to the generated code
-            xQueueReceive(xQueue, &qValue, 99999);
+            xQueuePeek(xQueue, &qValue, 99999);
             if(qValue == 2){
                 LED_Toggle();
-                vTaskDelay(QUEUE_SEND_FREQUENCY_MS-100 );
+                // vTaskDelay(QUEUE_SEND_FREQUENCY_MS-100 );
+                xQueueReceive(xQueue, &qValue, 99999);
             }
             break;
         }
