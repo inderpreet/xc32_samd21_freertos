@@ -28,6 +28,7 @@
 // *****************************************************************************
 
 #include "app.h"
+#include "peripheral/sercom/usart/plib_sercom5_usart.h"
 
 // *****************************************************************************
 // *****************************************************************************
@@ -136,11 +137,13 @@ void APP_Tasks ( void )
         {
             v=1;
             xQueueSend(xQueue, &v, 0); // send 1 to the Queue.
-            vTaskDelay(QUEUE_SEND_FREQUENCY_MS );
+            vTaskDelay(1000/portTICK_PERIOD_MS );
             
             v = 2;
             xQueueSend(xQueue, &v, 0); // send 1 to the Queue.
-            vTaskDelay(QUEUE_SEND_FREQUENCY_MS );
+            vTaskDelay(500/portTICK_PERIOD_MS );
+            
+//            SERCOM5_USART_Write("Hello", 5);
             
             break;
         }

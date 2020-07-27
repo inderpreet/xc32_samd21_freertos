@@ -33,6 +33,7 @@
 
 
 #include "app.h"
+#include "peripheral/port/plib_port.h"
 // *****************************************************************************
 // *****************************************************************************
 // Section: Global Data Definitions
@@ -139,14 +140,15 @@ void APP1_Tasks ( void )
         case APP1_STATE_SERVICE_TASKS:
         {
             // added this line to the generated code
-            xQueuePeek(xQueue, &qValue, 99999);
-            
+            xQueuePeek(xQueue, &qValue, 0);
             if(qValue == 1){
                 LED_Toggle();
+                //RLY1_Toggle();
                 //vTaskDelay(QUEUE_SEND_FREQUENCY_MS-100 );
-                xQueueReceive(xQueue, &qValue, 99999);
+                xQueueReceive(xQueue, &qValue, 0);
+                qValue = 0;
             }            
-            
+            vTaskDelay(50);
             break;
         }
 

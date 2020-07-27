@@ -38,6 +38,7 @@ int main ( void )
 {
     /* Initialize all modules */
     SYS_Initialize ( NULL );
+    ADC_Enable();
 
     while ( true )
     {

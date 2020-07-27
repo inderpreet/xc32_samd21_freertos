@@ -32,6 +32,9 @@
 #include "bsp/bsp.h"
 #include "queue.h"
 #include "app.h"
+#include "peripheral/adc/plib_adc.h"
+#include "peripheral/port/plib_port.h"
+#include "peripheral/sercom/usart/plib_sercom5_usart.h"
 // *****************************************************************************
 // *****************************************************************************
 // Section: Global Data Definitions
@@ -117,6 +120,8 @@ void APP2_Tasks ( void )
 {
     // added this line to the generated code
     unsigned long qValue;
+    unsigned int adc_result;
+    char str[10];
     
     /* Check the application's current state. */
     switch ( app2Data.state )
@@ -137,13 +142,32 @@ void APP2_Tasks ( void )
 
         case APP2_STATE_SERVICE_TASKS:
         {
+            /* Start ADC conversion */
+            ADC_ConversionStart();
+
+            /* Wait till ADC conversion result is available */
+            while(!ADC_ConversionStatusGet())
+            {
+
+            };
             // added this line to the generated code
-            xQueuePeek(xQueue, &qValue, 99999);
-            if(qValue == 2){
-                LED_Toggle();
-                // vTaskDelay(QUEUE_SEND_FREQUENCY_MS-100 );
-                xQueueReceive(xQueue, &qValue, 99999);
+            adc_result = ADC_ConversionResultGet();
+            if(adc_result > 1000){
+                RLY1_Set();
+            } else {
+                RLY1_Clear();
             }
+            
+            xQueuePeek(xQueue, &qValue, 0);
+            if(qValue == 2){
+//              LED_Toggle();
+                sprintf(str, "%8d\n\r", adc_result);
+                SERCOM5_USART_Write(str, sizeof(str));
+                // vTaskDelay(QUEUE_SEND_FREQUENCY_MS-100 );
+                xQueueReceive(xQueue, &qValue, 0);
+                qValue = 0;
+            }
+            vTaskDelay(50);
             break;
         }
 

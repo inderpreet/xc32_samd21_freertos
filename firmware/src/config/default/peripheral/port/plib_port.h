@@ -66,6 +66,15 @@
 // *****************************************************************************
 
   
+/*** Macros for RLY1 pin ***/
+#define RLY1_Set()               (PORT_REGS->GROUP[1].PORT_OUTSET = 1 << 9)
+#define RLY1_Clear()             (PORT_REGS->GROUP[1].PORT_OUTCLR = 1 << 9)
+#define RLY1_Toggle()            (PORT_REGS->GROUP[1].PORT_OUTTGL = 1 << 9)
+#define RLY1_Get()               (((PORT_REGS->GROUP[1].PORT_IN >> 9)) & 0x01)
+#define RLY1_OutputEnable()      (PORT_REGS->GROUP[1].PORT_DIRSET = 1 << 9)
+#define RLY1_InputEnable()       (PORT_REGS->GROUP[1].PORT_DIRCLR = 1 << 9)
+#define RLY1_PIN                  PORT_PIN_PB09
+
 
 
 // *****************************************************************************

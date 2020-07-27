@@ -1,18 +1,22 @@
 /*******************************************************************************
-  NVIC PLIB Implementation
+  SERCOM Universal Synchronous/Asynchrnous Receiver/Transmitter PLIB
 
-  Company:
+  Company
     Microchip Technology Inc.
 
-  File Name:
-    plib_nvic.c
+  File Name
+    plib_sercom5_usart.h
 
-  Summary:
-    NVIC PLIB Source File
+  Summary
+    USART peripheral library interface.
 
-  Description:
-    None
+  Description
+    This file defines the interface to the USART peripheral library. This
+    library provides access to and control of the associated peripheral
+    instance.
 
+  Remarks:
+    None.
 *******************************************************************************/
 
 /*******************************************************************************
@@ -38,29 +42,61 @@
 * THAT YOU HAVE PAID DIRECTLY TO MICROCHIP FOR THIS SOFTWARE.
 *******************************************************************************/
 
-#include "device.h"
-#include "plib_nvic.h"
-
+#ifndef PLIB_SERCOM5_USART_H // Guards against multiple inclusion
+#define PLIB_SERCOM5_USART_H
 
 // *****************************************************************************
 // *****************************************************************************
-// Section: NVIC Implementation
+// Section: Included Files
 // *****************************************************************************
 // *****************************************************************************
 
-void NVIC_Initialize( void )
-{
+#include "plib_sercom_usart_common.h"
 
-    /* Enable NVIC Controller */
-    __DMB();
-    __enable_irq();
+// DOM-IGNORE-BEGIN
+#ifdef __cplusplus // Provide C++ Compatibility
 
-    /* Enable the interrupt sources and configure the priorities as configured
-     * from within the "Interrupt Manager" of MHC. */
-    NVIC_SetPriority(SERCOM5_IRQn, 3);
-    NVIC_EnableIRQ(SERCOM5_IRQn);
+	extern "C" {
 
+#endif
+// DOM-IGNORE-END
 
+// *****************************************************************************
+// *****************************************************************************
+// Section: Interface Routines
+// *****************************************************************************
+// *****************************************************************************
 
-    return;
-}
+void SERCOM5_USART_Initialize( void );
+
+bool SERCOM5_USART_SerialSetup( USART_SERIAL_SETUP * serialSetup, uint32_t clkFrequency );
+
+bool SERCOM5_USART_Write( void *buffer, const size_t size );
+
+bool SERCOM5_USART_WriteIsBusy( void );
+
+size_t SERCOM5_USART_WriteCountGet( void );
+
+void SERCOM5_USART_WriteCallbackRegister( SERCOM_USART_CALLBACK callback, uintptr_t context );
+
+bool SERCOM5_USART_Read( void *buffer, const size_t size );
+
+bool SERCOM5_USART_ReadIsBusy( void );
+
+size_t SERCOM5_USART_ReadCountGet( void );
+
+void SERCOM5_USART_ReadCallbackRegister( SERCOM_USART_CALLBACK callback, uintptr_t context );
+
+USART_ERROR SERCOM5_USART_ErrorGet( void );
+
+uint32_t SERCOM5_USART_FrequencyGet( void );
+
+// DOM-IGNORE-BEGIN
+#ifdef __cplusplus  // Provide C++ Compatibility
+
+    }
+
+#endif
+// DOM-IGNORE-END
+
+#endif //PLIB_SERCOM5_USART_H
